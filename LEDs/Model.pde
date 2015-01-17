@@ -106,6 +106,8 @@ public static class LED extends LXModel {
   public final float y;
   public final float rectTheta;
 
+  public static final int RECT_MAX = 1242;
+
   public LED(float x, float y) {
     super(Arrays.asList(new LXPoint[] { new LXPoint(x, y) }));
 
