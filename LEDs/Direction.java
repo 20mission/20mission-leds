@@ -1,8 +1,8 @@
 public enum Direction {
-  NORTH(600),
-  SOUTH(600),
-  EAST(170),
-  WEST(130);
+  NORTH(447),
+  SOUTH(448),
+  EAST(174),
+  WEST(131);
 
   public final int NUM_LEDS;
 

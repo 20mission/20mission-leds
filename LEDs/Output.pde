@@ -1,14 +1,14 @@
 public static class Output extends OPCOutput {
 
-  final static int EAST_BREAK_INDEX = 140;
-  final static int WEST_BREAK_INDEX = 30;
+  final static int EAST_BREAK_INDEX = 150;
+  final static int WEST_BREAK_INDEX = 3;
 
   public Output(LX lx) {
     super(lx, "beaglebone.local", 7890, pointIndices());
   }
 
   private static int[] pointIndices() {
-    int[] pointIndices = new int[1500];
+    int[] pointIndices = new int[1200];
 
     int index = 0;
 
@@ -33,7 +33,7 @@ public static class Output extends OPCOutput {
     for (int i = 0; i < Direction.SOUTH.NUM_LEDS; i++) {
       pointIndices[index++] = Direction.NORTH.NUM_LEDS + i;
     }
-    for (int i = WEST_BREAK_INDEX; i < Direction.WEST.NUM_LEDS; i++) {
+    for (int i = Direction.WEST.NUM_LEDS - 1; i >= WEST_BREAK_INDEX; i--) {
       pointIndices[index++] = Direction.NORTH.NUM_LEDS
         + Direction.SOUTH.NUM_LEDS + Direction.EAST.NUM_LEDS + i;
     }

@@ -11,7 +11,7 @@ abstract public class Pattern extends LXPattern {
 
 public class BasicPattern extends Pattern {
 
-  final SinLFO position = new SinLFO(0, 360, 20000);
+  final SawLFO position = new SawLFO(0, 360, 8000);
 
   BasicPattern(LX lx, Model model) {
     super(lx, model);
