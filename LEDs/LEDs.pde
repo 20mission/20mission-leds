@@ -2,7 +2,15 @@ import heronarts.lx.*;
 import java.util.*;
 
 void setup() {
-  noLoop();
+  boolean headless = false;
+  for (String arg : args) {
+    if (arg.equals("--headless")) {
+      headless = true;
+    }
+  }
+  if (headless) {
+    noLoop();
+  }
 
   Model model = new Model();
   P2LX lx = new P2LX(this, model);
