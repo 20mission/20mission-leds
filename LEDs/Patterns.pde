@@ -45,3 +45,25 @@ public class RainbowPattern extends Pattern {
     }
   }
 }
+
+public class RainbowCandyPattern extends Pattern {
+
+  RainbowCandyPattern(LX lx) {
+    super(lx);
+  }
+  void run(double deltaMs) {
+    for (LED led : model.leds) {
+      colors[led.index] = lx.hsb((int)random(360), 100, 100);
+    }
+  }
+}
+
+public class ColorStrobePattern extends Pattern {
+
+  ColorStrobePattern(LX lx) {
+    super(lx);
+  }
+  void run(double deltaMs) {
+    setColors(lx.hsb((int)random(360), 100, 100));
+  }
+}
