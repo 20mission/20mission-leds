@@ -1,8 +1,8 @@
 import java.util.*;
-import processing.serial.*;
 import heronarts.lx.*;
+import jssc.*;
 
-Serial myPort;
+SerialPort serialPort;
 Microphone microphone = new Microphone();
 
 void setup() {
@@ -26,10 +26,18 @@ void setup() {
     // new TestPixelPattern(lx),
   });
 
-  String[] serials = Serial.list();
-  for (int i = 0; i < serials.length; i++) {
-    if (serials[i].equals("/dev/tty.usbmodem1421") || serials[i].equals("/dev/ttyACM0")) {
-      myPort = new Serial(LEDs.this, serials[i], 57600);
+  for (String serialName : SerialPortList.getPortNames()) {
+    if (serialName.equals("/dev/tty.usbmodem1421") || serialName.equals("/dev/ttyACM0")) {
+      serialPort = new SerialPort(serialName);
+      try {
+        serialPort.openPort();//Open serial port
+        serialPort.setParams(SerialPort.BAUDRATE_9600, 
+                             SerialPort.DATABITS_8,
+                             SerialPort.STOPBITS_1,
+                             SerialPort.PARITY_NONE);//Set params. Also you can set params by this string: serialPort.setParams(9600, 8, 1, 0);
+      } catch (SerialPortException ex) {
+        System.out.println(ex);
+      }
       break;
     }
   }
@@ -38,15 +46,22 @@ void setup() {
 }
 
 void draw() {
-  while (myPort != null && myPort.available() > 0) {
-    int lf = 10;
-    String myString = myPort.readStringUntil(lf);
-    if (myString != null) {
-      myString = myString.trim();
+  if (serialPort != null) {
+    String inputString = null;
+    try {
+      inputString = serialPort.readString();
+    } catch (SerialPortException ex) {
+      System.out.println(ex);
     }
-    if (myString != null && !myString.equals("")) {
-      int i = Integer.parseInt(myString);
-      microphone.volume = i / 512.0;
-    }
+    if (inputString != null) {
+      String[] inputArray = inputString.split("\r\n");
+      if (inputArray.length > 0) {
+        String myString = inputArray[0];
+        if (myString != null && !myString.equals("")) {
+          int i = Integer.parseInt(myString);
+          microphone.volume = i / 512.0;
+        }
+      }
+    } 
   }
 }
