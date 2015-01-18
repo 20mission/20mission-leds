@@ -57,9 +57,12 @@ void draw() {
       String[] inputArray = inputString.split("\r\n");
       if (inputArray.length > 0) {
         String myString = inputArray[0];
-        if (myString != null && !myString.equals("")) {
-          int i = Integer.parseInt(myString);
-          microphone.volume = i / 512.0;
+        if (myString != null) {
+          myString = myString.trim();
+          if (myString != null && !myString.equals("")) {
+            int i = Integer.parseInt(myString);
+            microphone.volume = i / 512.0;
+          }
         }
       }
     } 
