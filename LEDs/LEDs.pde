@@ -19,12 +19,14 @@ void setup() {
     new FastMicrophonePulsePattern(lx),
     new ColorStrobePattern(lx),
     new RainbowCandyPattern(lx),
-    new CrazyColorStrobePattern(lx),
 
+    new CrazyColorStrobePattern(lx),
     // new VolumePattern(lx),
     // new SpinPattern(lx),
     // new TestPixelPattern(lx),
   });
+
+  lx.addEffect(new TurnOffDeadPixelEffect(lx));
 
   for (String serialName : SerialPortList.getPortNames()) {
     if (serialName.equals("/dev/tty.usbmodem1421") || serialName.equals("/dev/ttyACM0")) {
@@ -66,5 +68,14 @@ void draw() {
         }
       }
     } 
+  }
+}
+
+public class TurnOffDeadPixelEffect extends LXEffect {
+  public TurnOffDeadPixelEffect(LX lx) {
+    super(lx);
+  }
+  void run(double deltaMs) {
+    colors[1187] = 0;
   }
 }
