@@ -1,33 +1,52 @@
-import heronarts.lx.*;
 import java.util.*;
+import processing.serial.*;
+import heronarts.lx.*;
+
+Serial myPort;
+Microphone microphone = new Microphone();
 
 void setup() {
-  boolean headless = false;
-  for (String arg : args) {
-    if (arg.equals("--headless")) {
-      headless = true;
-    }
-  }
-  if (headless) {
-    noLoop();
-  }
-
-  Model model = new Model();
-  P2LX lx = new P2LX(this, model);
+  P2LX lx = new P2LX(this, new Model());
+  lx.addOutput(new Output(lx));
+  lx.enableAutoTransition(120000);
 
   lx.setPatterns(new LXPattern[] {
-    new RainbowCandyPattern(lx),
-    new ColorStrobePattern(lx),
     new RainbowPattern(lx),
-    new SpinPattern(lx)
-  });
-  for (LXPattern pattern : lx.engine.getFocusedChannel().getPatterns()) {
-    pattern.setTransition(new DissolveTransition(lx).setDuration(1000));
-  }
-  // lx.engine.getFocusedChannel().getFader().setValue(1);
+    new AntsPattern(lx),
+    new FadePattern(lx),
+    new MicrophonePulsePattern(lx),
+    new StrobePattern(lx),
+    new FastMicrophonePulsePattern(lx),
+    new ColorStrobePattern(lx),
+    new RainbowCandyPattern(lx),
+    new CrazyColorStrobePattern(lx),
 
-  Output output = new Output(lx);
-  lx.addOutput(output);
-  
+    // new VolumePattern(lx),
+    // new SpinPattern(lx),
+    // new TestPixelPattern(lx),
+  });
+
+  String[] serials = Serial.list();
+  for (int i = 0; i < serials.length; i++) {
+    if (serials[i].equals("/dev/tty.usbmodem1421") || serials[i].equals("/dev/ttyACM0")) {
+      myPort = new Serial(LEDs.this, serials[i], 57600);
+      break;
+    }
+  }
+
   lx.engine.setThreaded(true);
+}
+
+void draw() {
+  while (myPort != null && myPort.available() > 0) {
+    int lf = 10;
+    String myString = myPort.readStringUntil(lf);
+    if (myString != null) {
+      myString = myString.trim();
+    }
+    if (myString != null && !myString.equals("")) {
+      int i = Integer.parseInt(myString);
+      microphone.volume = i / 512.0;
+    }
+  }
 }

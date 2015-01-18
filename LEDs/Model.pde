@@ -1,7 +1,7 @@
 public static class Model extends LXModel {
 
   public final static int NUM_WALLS = 4;
-  public final static int NUM_LEDS = 1200;
+  public final static int NUM_LEDS = 1218;
 
   public final static int WALL_HEIGHT = Direction.EAST.NUM_LEDS;
   public final static int WALL_WIDTH = Direction.SOUTH.NUM_LEDS;

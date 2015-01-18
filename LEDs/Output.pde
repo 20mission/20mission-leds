@@ -1,14 +1,14 @@
 public static class Output extends OPCOutput {
 
   final static int EAST_BREAK_INDEX = 150;
-  final static int WEST_BREAK_INDEX = 3;
+  final static int WEST_BREAK_INDEX = 21;
 
   public Output(LX lx) {
     super(lx, "beaglebone.local", 7890, pointIndices());
   }
 
   private static int[] pointIndices() {
-    int[] pointIndices = new int[1200];
+    int[] pointIndices = new int[1218];
 
     int index = 0;
 
