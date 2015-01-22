@@ -11,7 +11,7 @@ void setup() {
   lx.enableAutoTransition(120000);
 
   lx.setPatterns(new LXPattern[] {
-    new LightsOffPattern(ls)
+    new LightsOffPattern(lx)
   });
 /*
   lx.setPatterns(new LXPattern[] {
