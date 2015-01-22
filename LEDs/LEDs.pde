@@ -11,6 +11,10 @@ void setup() {
   lx.enableAutoTransition(120000);
 
   lx.setPatterns(new LXPattern[] {
+    new LightsOffPattern(ls)
+  });
+/*
+  lx.setPatterns(new LXPattern[] {
     new RainbowPattern(lx),
     new AntsPattern(lx),
     new FadePattern(lx),
@@ -24,7 +28,7 @@ void setup() {
     // new VolumePattern(lx),
     // new SpinPattern(lx),
     // new TestPixelPattern(lx),
-  });
+  });*/
 
   lx.addEffect(new TurnOffDeadPixelEffect(lx));
 

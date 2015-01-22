@@ -21,6 +21,18 @@ public class VolumePattern extends Pattern {
   }
 }
 
+public class LightsOffPattern extends Pattern {
+
+  LightsOffPattern(LX lx) {
+    super(lx);
+  }
+
+  void run(double deltaMs) {
+    println(microphone.volume);
+    setColors(lx.hsb(0, 0, 0));
+  }
+}
+
 public class MicrophonePulsePattern extends Pattern {
 
   private final int NUM_PULSES = 27;
