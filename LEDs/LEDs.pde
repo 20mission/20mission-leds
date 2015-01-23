@@ -8,7 +8,7 @@ SerialPort serialPort;
 Microphone microphone = new Microphone();
 
 //server to set which pattern to show
-Server server;
+//Server server;
 
 P2LX lx;
 
@@ -60,7 +60,7 @@ void setup() {
 
   lx.engine.setThreaded(true);
   
-  server = new Server(this, 2973);
+//  server = new Server(this, 2973);
 }
 
 void draw() {
@@ -86,16 +86,16 @@ void draw() {
     } 
   }
   
-  // Get the next available client
-  Client thisClient = server.available();
-  // If the client is not null, and says something, display what it said
-  if (thisClient !=null) {
-    String whatClientSaid = thisClient.readString();
-    if (whatClientSaid != null) {
-      println(thisClient.ip() + "\t" + whatClientSaid);
-      changeMode(whatClientSaid);
-    } 
-  }
+//  // Get the next available client
+//  Client thisClient = server.available();
+//  // If the client is not null, and says something, display what it said
+//  if (thisClient !=null) {
+//    String whatClientSaid = thisClient.readString();
+//    if (whatClientSaid != null) {
+//      println(thisClient.ip() + "\t" + whatClientSaid);
+//      changeMode(whatClientSaid);
+//    } 
+//  }
   
 }
 
