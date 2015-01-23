@@ -8,7 +8,7 @@ SerialPort serialPort;
 Microphone microphone = new Microphone();
 
 //server to set which pattern to show
-//Server server;
+Server server;
 
 P2LX lx;
 
@@ -21,7 +21,7 @@ void setup() {
   lx.enableAutoTransition(120000);
 
   lx.setPatterns(new LXPattern[] {
-    new MicrophonePulsePattern(lx)
+    new LightsOffPattern(lx)
   });
 /*
   lx.setPatterns(new LXPattern[] {
@@ -60,10 +60,17 @@ void setup() {
 
   lx.engine.setThreaded(true);
   
-//  server = new Server(this, 2973);
+  server = new Server(this, 2973);
 }
 
 void draw() {
+  
+ thread("checkMic");
+ thread("checkServer");
+  
+}
+
+void checkMic(){
   if (serialPort != null) {
     String inputString = null;
     try {
@@ -84,19 +91,24 @@ void draw() {
         }
       }
     } 
+  }else{
+    microphone.volume = random(1,100) / 100.0;
   }
-  
-//  // Get the next available client
-//  Client thisClient = server.available();
-//  // If the client is not null, and says something, display what it said
-//  if (thisClient !=null) {
-//    String whatClientSaid = thisClient.readString();
-//    if (whatClientSaid != null) {
-//      println(thisClient.ip() + "\t" + whatClientSaid);
-//      changeMode(whatClientSaid);
-//    } 
-//  }
-  
+}
+
+void checkServer(){
+   if (server != null){
+    // Get the next available client
+    Client thisClient = server.available();
+    // If the client is not null, and says something, display what it said
+    if (thisClient !=null) {
+      String whatClientSaid = thisClient.readString();
+      if (whatClientSaid != null) {
+        println(thisClient.ip() + "\t" + whatClientSaid);
+        changeMode(whatClientSaid);
+      } 
+    }
+  }
 }
 
 
@@ -105,28 +117,22 @@ void changeMode(String mode){
   System.out.println("mode is: *"+mode+"*");
   if (mode.equals("off")){ 
     println("turned off");
-    startLX();
     lx.setPatterns(new LXPattern[] {
       new LightsOffPattern(lx)
     });
   }else if (mode.equals("on")){ 
-    startLX();
+    println("turned on");
     lx.setPatterns(new LXPattern[] {
       new LightsOnPattern(lx)
+    });
+  }else if (mode.equals("mic")){ 
+    println("turned on microphone");
+    lx.setPatterns(new LXPattern[] {
+      new MicrophonePulsePattern(lx)
     });
   }
 }
 
-void startLX(){
-  if(lx != null){
-    lx = null;
-  }
-  lx = new P2LX(this, new Model());
-  lx.addOutput(new Output(lx));
-  lx.enableAutoTransition(120000);
-  lx.engine.setThreaded(true);
-  lx.addEffect(new TurnOffDeadPixelEffect(lx));
-}
 
 public class TurnOffDeadPixelEffect extends LXEffect {
   public TurnOffDeadPixelEffect(LX lx) {

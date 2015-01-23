@@ -39,7 +39,7 @@ public class LightsOnPattern extends Pattern {
   }
 
   void run(double deltaMs) {
-    setColors(lx.hsb(0, 100, 10));
+    setColors(lx.hsb(0, 0, 100));
   }
 }
 
