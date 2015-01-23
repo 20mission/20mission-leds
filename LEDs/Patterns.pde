@@ -28,10 +28,21 @@ public class LightsOffPattern extends Pattern {
   }
 
   void run(double deltaMs) {
-    println(microphone.volume);
     setColors(lx.hsb(0, 0, 0));
   }
 }
+
+public class LightsOnPattern extends Pattern {
+
+  LightsOnPattern(LX lx) {
+    super(lx);
+  }
+
+  void run(double deltaMs) {
+    setColors(lx.hsb(0, 100, 10));
+  }
+}
+
 
 public class MicrophonePulsePattern extends Pattern {
 

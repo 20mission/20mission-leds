@@ -1,17 +1,27 @@
 import java.util.*;
 import heronarts.lx.*;
 import jssc.*;
+import processing.net.*;
 
+//serialport is connected to an arduino micro which runs at 3.3v and acts as an ADC for the microphone.  It reports back the peak mic signal every 50ms.
 SerialPort serialPort;
 Microphone microphone = new Microphone();
 
+//server to set which pattern to show
+Server server;
+
+P2LX lx;
+
+
+
 void setup() {
-  P2LX lx = new P2LX(this, new Model());
+  
+  lx = new P2LX(this, new Model());
   lx.addOutput(new Output(lx));
   lx.enableAutoTransition(120000);
 
   lx.setPatterns(new LXPattern[] {
-    new LightsOffPattern(lx)
+    new MicrophonePulsePattern(lx)
   });
 /*
   lx.setPatterns(new LXPattern[] {
@@ -49,6 +59,8 @@ void setup() {
   }
 
   lx.engine.setThreaded(true);
+  
+  server = new Server(this, 2973);
 }
 
 void draw() {
@@ -73,6 +85,47 @@ void draw() {
       }
     } 
   }
+  
+  // Get the next available client
+  Client thisClient = server.available();
+  // If the client is not null, and says something, display what it said
+  if (thisClient !=null) {
+    String whatClientSaid = thisClient.readString();
+    if (whatClientSaid != null) {
+      println(thisClient.ip() + "\t" + whatClientSaid);
+      changeMode(whatClientSaid);
+    } 
+  }
+  
+}
+
+
+void changeMode(String mode){
+  mode = mode.trim();
+  System.out.println("mode is: *"+mode+"*");
+  if (mode.equals("off")){ 
+    println("turned off");
+    startLX();
+    lx.setPatterns(new LXPattern[] {
+      new LightsOffPattern(lx)
+    });
+  }else if (mode.equals("on")){ 
+    startLX();
+    lx.setPatterns(new LXPattern[] {
+      new LightsOnPattern(lx)
+    });
+  }
+}
+
+void startLX(){
+  if(lx != null){
+    lx = null;
+  }
+  lx = new P2LX(this, new Model());
+  lx.addOutput(new Output(lx));
+  lx.enableAutoTransition(120000);
+  lx.engine.setThreaded(true);
+  lx.addEffect(new TurnOffDeadPixelEffect(lx));
 }
 
 public class TurnOffDeadPixelEffect extends LXEffect {
