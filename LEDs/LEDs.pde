@@ -12,13 +12,26 @@ Server server;
 
 P2LX lx;
 
+//String patternList[] = {"Volume", "LightsOff", "LightsOn", "MicrophonePulse", "FastMicrophonePulse", "Ants", "Spin", "Rainbow", "RainbowCandy", "Fade", "CrazyColorStrobe", "ColorStrobe", "Strobe", "TestPixel"};
+//Class<?> patternObjects[] = {VolumePattern.class, LightsOffPattern.class, LightsOnPattern.class, MicrophonePulsePattern.class, FastMicrophonePulsePattern.class, AntsPattern.class, SpinPattern.class, RainbowPattern.class, RainbowCandyPattern.class, FadePattern.class, CrazyColorStrobePattern.class, ColorStrobePattern.class, StrobePattern.class, TestPixelPattern.class};
+
+
+String camelize(String s){
+  String t[] = s.split("_");
+  String result = "";
+  for(int x = 0; x < t.length; x++){
+    String token = t[x];
+    result += token.substring(0,1).toUpperCase()+token.substring(1);
+  }
+  return result;
+}
 
 
 void setup() {
   
   lx = new P2LX(this, new Model());
   lx.addOutput(new Output(lx));
-  lx.enableAutoTransition(120000);
+  //lx.enableAutoTransition(120000);
 
   lx.setPatterns(new LXPattern[] {
     new LightsOffPattern(lx)
@@ -61,6 +74,9 @@ void setup() {
   lx.engine.setThreaded(true);
   
   server = new Server(this, 2973);
+  
+  
+  
 }
 
 void draw() {
@@ -105,31 +121,118 @@ void checkServer(){
       String whatClientSaid = thisClient.readString();
       if (whatClientSaid != null) {
         println(thisClient.ip() + "\t" + whatClientSaid);
-        changeMode(whatClientSaid);
+        processCommand(whatClientSaid);
       } 
     }
   }
 }
 
 
-void changeMode(String mode){
-  mode = mode.trim();
-  System.out.println("mode is: *"+mode+"*");
-  if (mode.equals("off")){ 
-    println("turned off");
-    lx.setPatterns(new LXPattern[] {
-      new LightsOffPattern(lx)
-    });
-  }else if (mode.equals("on")){ 
-    println("turned on");
-    lx.setPatterns(new LXPattern[] {
-      new LightsOnPattern(lx)
-    });
-  }else if (mode.equals("mic")){ 
-    println("turned on microphone");
-    lx.setPatterns(new LXPattern[] {
-      new MicrophonePulsePattern(lx)
-    });
+void processCommand(String command){
+  command = command.trim();
+  System.out.println("command is: *"+command+"*");
+  String cmd[] = command.toLowerCase().split(" ");
+  
+  //return if command length is <= 1 because no valid commands have less than 2 arguments
+  if (cmd.length < 2){
+    println("error: cmd length is "+cmd.length+", exiting!"); 
+    return;
+  }
+  
+  if (cmd[0].equals("set")){
+    if (cmd[1].equals("pattern")){
+      
+      String pattern = camelize(cmd[2]);
+      println("Pattern changing to: "+pattern);
+
+      //String patternList[] = {"Volume", "LightsOff", "LightsOn", "MicrophonePulse", "FastMicrophonePulse", "Ants", "Spin", "Rainbow", "RainbowCandy", "Fade", "CrazyColorStrobe", "ColorStrobe", "Strobe", "TestPixel"};
+      if(pattern.equals("Volume")){
+        lx.setPatterns(new LXPattern[] {
+          new VolumePattern(lx)
+        });
+        return;
+      }  
+      if(pattern.equals("LightsOff")){
+        lx.setPatterns(new LXPattern[] {
+          new LightsOffPattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("LightsOn")){
+        lx.setPatterns(new LXPattern[] {
+          new LightsOnPattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("MicrophonePulse")){
+        lx.setPatterns(new LXPattern[] {
+          new MicrophonePulsePattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("FastMicrophonePulse")){
+        lx.setPatterns(new LXPattern[] {
+          new FastMicrophonePulsePattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("Ants")){
+        lx.setPatterns(new LXPattern[] {
+          new AntsPattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("Spin")){
+        lx.setPatterns(new LXPattern[] {
+          new SpinPattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("Rainbow")){
+        lx.setPatterns(new LXPattern[] {
+          new RainbowPattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("RainbowCandy")){
+        lx.setPatterns(new LXPattern[] {
+          new RainbowCandyPattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("Fade")){
+        lx.setPatterns(new LXPattern[] {
+          new FadePattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("CrazyColorStrobe")){
+        lx.setPatterns(new LXPattern[] {
+          new CrazyColorStrobePattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("ColorStrobe")){
+        lx.setPatterns(new LXPattern[] {
+          new ColorStrobePattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("Strobe")){
+        lx.setPatterns(new LXPattern[] {
+          new StrobePattern(lx)
+        });
+        return;
+      }
+      if(pattern.equals("TestPixel")){
+        lx.setPatterns(new LXPattern[] {
+          new TestPixelPattern(lx)
+        });
+        return;
+      }
+      
+      
+    }
   }
 }
 
