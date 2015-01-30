@@ -120,9 +120,9 @@ void checkServer(){
     if (thisClient !=null) {
       String whatClientSaid = thisClient.readString();
       if (whatClientSaid != null) {
-        if (thisClient.ip() != null){
-          print(thisClient.ip());
-        }
+//        if (thisClient.ip() != null){
+//          print(thisClient.ip());
+//        }
         println("\t" + whatClientSaid);
         processCommand(whatClientSaid);
       } 
