@@ -174,7 +174,7 @@ public class RainbowCandyPattern extends Pattern {
 
 public class FadePattern extends Pattern {
 
-  final SawLFO hue = new SawLFO(0, 360, 10000);
+  final SawLFO hue = new SawLFO(0, 360, 40000);
 
   FadePattern(LX lx) {
     super(lx);
