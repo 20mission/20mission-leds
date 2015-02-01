@@ -4,7 +4,7 @@ public static class Output extends OPCOutput {
   final static int WEST_BREAK_INDEX = 21;
 
   public Output(LX lx) {
-    super(lx, "beaglebone.local", 7890, pointIndices());
+    super(lx, "courtyard-leds.local", 7890, pointIndices());
   }
 
   private static int[] pointIndices() {
